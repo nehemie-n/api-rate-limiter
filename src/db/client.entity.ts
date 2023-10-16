@@ -14,7 +14,7 @@ export class Client extends Document {
   @Prop({ unique: true, lowercase: true, trim: true })
   email: string;
 
-  @Prop()
+  @Prop({ select: false })
   password: string; // hashed password
 
   /**
