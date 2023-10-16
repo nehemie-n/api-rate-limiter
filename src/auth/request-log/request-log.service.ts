@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { ObjectId } from 'mongodb';
 import { RequestLog, RequestLogDocument } from '../../db/request-log.entity';
 
 @Injectable()
@@ -11,7 +12,7 @@ export class RequestLogService {
   ) {}
 
   async logRequest(
-    client: string,
+    client: ObjectId,
     path: string,
     details: Record<string, any>,
   ): Promise<RequestLogDocument> {

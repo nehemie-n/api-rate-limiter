@@ -9,6 +9,7 @@ import { Reflector } from '@nestjs/core';
 import { Request } from 'express';
 import { ClientDocument } from '../db/client.entity';
 import { RequestLogService } from './request-log/request-log.service';
+import { ObjectId } from 'mongodb';
 
 @Injectable()
 export class MonthlyRequestLimitGuard implements CanActivate {
@@ -67,9 +68,13 @@ export class MonthlyRequestLimitGuard implements CanActivate {
    * @param req
    */
   private logRequest(client: ClientDocument, req: Request) {
-    this.requestLogService.logRequest(client._id, req.path, {
+    const headers = req.headersDistinct;
+    delete headers['authorization'];
+    this.requestLogService.logRequest(new ObjectId(client._id), req.url, {
       ip: req.ip,
-      headers: req.headersDistinct,
+      hostname: req.hostname,
+      headers: headers,
+      body: req.body,
     });
   }
 }
