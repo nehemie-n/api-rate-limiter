@@ -9,6 +9,8 @@ import { AuthModule } from './auth/auth.module';
 import { ClientsModule } from './clients/clients.module';
 import { DbModule } from './db/db.module';
 import { APP_GUARD } from '@nestjs/core';
+import { RedisModule } from '@liaoliaots/nestjs-redis';
+import { RequestLogModule } from './auth/request-log/request-log.module';
 
 @Module({
   imports: [
@@ -40,10 +42,25 @@ import { APP_GUARD } from '@nestjs/core';
         },
       ],
     }),
+    /**
+     * Redis for user monthly requests counting
+     */
+    RedisModule.forRoot({
+      config: {
+        host: 'localhost',
+        port: 6379,
+        name: 'monthly-rate',
+      },
+      // readyLog: true,
+    }),
+    /**
+     *
+     */
     MongooseModule.forRoot('mongodb://localhost:27017/rate-limiter'),
     AuthModule,
     ClientsModule,
     DbModule,
+    RequestLogModule,
   ],
   controllers: [AppController],
   providers: [

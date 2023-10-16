@@ -6,9 +6,23 @@ import { Client, ClientDocument, ClientModel } from '../db/client.entity';
 export class ClientsService {
   constructor(@InjectModel(Client.name) private clientModel: ClientModel) {}
 
-  async findOne(email: string): Promise<ClientDocument | undefined> {
+  /**
+   * Find client by their email
+   * @param email
+   * @returns
+   */
+  async findByEmail(email: string): Promise<ClientDocument | undefined> {
     return this.clientModel.findOne({
       email: email,
     });
+  }
+
+  /**
+   * Find client by the id
+   * @param id
+   * @returns
+   */
+  async findByid(id: string): Promise<ClientDocument | undefined> {
+    return this.clientModel.findById(id);
   }
 }

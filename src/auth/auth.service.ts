@@ -17,11 +17,10 @@ export class AuthService {
    * @returns
    */
   async validateUser(email: string, pass: string): Promise<any> {
-    const user = await this.clientsService.findOne(email);
-    if (user && user.password === pass) {
+    const user = await this.clientsService.findByEmail(email);
+    if (user?.password === pass) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { password, ...result } = user.toJSON();
-      return result;
+      return user;
     }
     return null;
   }
@@ -32,7 +31,12 @@ export class AuthService {
    * @returns
    */
   async login(client: ClientDocument) {
-    const payload = { email: client.email, id: client.id };
+    console.log(client.id);
+    const payload = {
+      email: client.email,
+      sub: client.id,
+      id: client.id,
+    };
     return {
       access_token: this.jwtService.sign(payload),
     };
