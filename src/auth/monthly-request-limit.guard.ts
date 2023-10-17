@@ -2,14 +2,15 @@ import { RedisService } from '@liaoliaots/nestjs-redis';
 import {
   CanActivate,
   ExecutionContext,
+  HttpException,
+  HttpStatus,
   Injectable,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Request } from 'express';
+import { ObjectId } from 'mongodb';
 import { ClientDocument } from '../db/client.entity';
 import { RequestLogService } from './request-log/request-log.service';
-import { ObjectId } from 'mongodb';
 
 @Injectable()
 export class MonthlyRequestLimitGuard implements CanActivate {
@@ -39,7 +40,10 @@ export class MonthlyRequestLimitGuard implements CanActivate {
 
     const requestCount = parseInt(await redisClient.get(requestKey)) || 0;
     if (requestCount >= client.monthlyRequestLimit) {
-      throw new UnauthorizedException('Monthly limit exceeded');
+      throw new HttpException(
+        'Monthly limit exceeded',
+        HttpStatus.TOO_MANY_REQUESTS,
+      );
     }
     // Set expiration time for the key (in seconds)
     // Assuming a month has 30 days

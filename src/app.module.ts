@@ -28,7 +28,11 @@ import { RequestLogModule } from './auth/request-log/request-log.module';
        * Default config
        * (host = localhost, port = 6379)
        */
-      storage: new ThrottlerStorageRedisService(),
+      storage: new ThrottlerStorageRedisService({
+        host: process.env.REDIS_HOST,
+        port: parseInt(process.env.REDIS_PORT),
+        name: 'ip-rate',
+      }),
       /**
        * When using redis clusters
        */ // storage: new ThrottlerStorageRedisService(
@@ -47,8 +51,8 @@ import { RequestLogModule } from './auth/request-log/request-log.module';
      */
     RedisModule.forRoot({
       config: {
-        host: 'localhost',
-        port: 6379,
+        host: process.env.REDIS_HOST,
+        port: parseInt(process.env.REDIS_PORT),
         name: 'monthly-rate',
       },
       // readyLog: true,
@@ -56,7 +60,7 @@ import { RequestLogModule } from './auth/request-log/request-log.module';
     /**
      *
      */
-    MongooseModule.forRoot('mongodb://localhost:27017/rate-limiter'),
+    MongooseModule.forRoot(process.env.MONGO_URI),
     AuthModule,
     ClientsModule,
     DbModule,

@@ -15,6 +15,11 @@ export class AppController {
     private clientsService: ClientsService,
   ) {}
 
+  @Get('')
+  async index() {
+    return { message: 'Hello, API Rate limiter here!' };
+  }
+
   @UseGuards(LocalAuthGuard)
   @Post('auth/login')
   async login(@Request() req) {
@@ -28,7 +33,7 @@ export class AppController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('upgrade')
+  @Post('upgrade')
   async upgradePlan(@Request() req) {
     let client = req.user as ClientDocument;
     client = await this.clientsService.upgradePlan(
