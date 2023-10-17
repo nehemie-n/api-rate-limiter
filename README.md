@@ -64,9 +64,9 @@ Below are the endpoints to use when testing the application
 ```json
 {
   "/": "GET: For testing launch",
-  "/auth/login": "GET: For logging in {email, password}",
+  "/auth/login": "POST: For logging in {email, password}",
   "/profile": "GET: For fetching your profile",
-  "/upgrade": "Post: For upgrading the plan adds +5 request limit to the month"
+  "/upgrade": "POST: For upgrading the plan adds +5 request limit to the month"
 }
 ```
 
